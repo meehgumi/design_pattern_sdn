@@ -1,5 +1,7 @@
 package fr.fges;
 
+import fr.fges.command.Command;
+
 public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -22,7 +24,7 @@ public class Main {
         System.out.println("Using storage file: " + storageFile);
 
         while (true) {
-            Menu.handleMenu();
+            Command.handleMenu();
         }
     }
 }
