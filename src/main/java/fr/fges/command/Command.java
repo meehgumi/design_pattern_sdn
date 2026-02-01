@@ -7,13 +7,14 @@ import fr.fges.Menu;
 
 public class Command {
 
-    public static String getUserInput(String prompt) {
-        Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+
+    private String getUserInput(String prompt) {
         System.out.printf("%s: ", prompt);
         return scanner.nextLine();
     }
 
-    public static void addGame() {
+    public void addGame() {
         String title = getUserInput("Title");
         String minPlayersStr = getUserInput("Minimum Players");
         String maxPlayersStr = getUserInput("Maximum Players");
@@ -25,7 +26,7 @@ public class Command {
         System.out.println("Board game added successfully.");
     }
 
-    public static void removeGame() {
+    public void removeGame() {
         String title = getUserInput("Title of game to remove");
         var games = GameCollection.getGames();
         for (BoardGame game : games) {
@@ -38,18 +39,17 @@ public class Command {
         System.out.println("No board game found with that title.");
     }
 
-    public static void listAllGames() {
+    public void listAllGames() {
         GameCollection.viewAllGames();
     }
 
-    public static void exit() {
+    public void exit() {
         System.out.println("Exiting the application. Goodbye!");
         System.exit(0);
     }
 
-    public static void handleMenu() {
+    public void handleMenu() {
         Menu.displayMainMenu();
-        Scanner scanner = new Scanner(System.in);
         String choice = scanner.nextLine();
         switch (choice) {
             case "1" -> addGame();

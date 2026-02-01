@@ -12,7 +12,6 @@ public class Main {
 
         String storageFile = args[0];
 
-        // Check file extension
         if (!storageFile.endsWith(".json") && !storageFile.endsWith(".csv")) {
             System.out.println("Error: Storage file must have .json or .csv extension");
             System.exit(1);
@@ -20,11 +19,12 @@ public class Main {
 
         GameCollection.setStorageFile(storageFile);
         GameCollection.loadFromFile();
-
         System.out.println("Using storage file: " + storageFile);
 
+        Command command = new Command();
+
         while (true) {
-            Command.handleMenu();
+            command.handleMenu();
         }
     }
 }
