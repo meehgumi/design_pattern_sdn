@@ -2,6 +2,8 @@ package fr.fges;
 
 import fr.fges.command.*;
 import java.util.*;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,40 +14,55 @@ public class Main {
 
         GameCollection.init(args[0]);
         Scanner sc = new Scanner(System.in);
-        
-        List<Command> commands = Arrays.asList(
-            new AddGameCommand(),
-            new ListGamesCommand(),
-            new DeleteCommand(),
-            new SearchCommand(),
-            new RecommandGameCommand()
-        );
+        DayOfWeek jour = LocalDate.now().getDayOfWeek(); // jour de la semaine actuelle
 
-        while (true) {
-            System.out.println("\n=== COLLECTION MANAGEMENT ===");
-            for (int i = 0; i < commands.size(); i++) {
-                System.out.println((i + 1) + ". " + commands.get(i).getLabel());
-            }
-            System.out.println("0. Exit");
-            System.out.print("Choice: ");
+        if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
+            System.out.println("Weekend summary");
 
-            try {
-                String input = sc.nextLine();
-                int choix = Integer.parseInt(input);
-                
-                if (choix == 0) {
-                    System.out.println("Goodbye!");
-                    break;
+            List<BoardGame> copie = new ArrayList<>(GameCollection.getGames());
+            Collections.shuffle(copie);
+            if (copie.size() < 3) {
+                System.out.println("Pas assez de jeux pour le sommaire.");
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    System.out.println("- " + copie.get(i).title());
                 }
-                
-                if (choix > 0 && choix <= commands.size()) {
-                    commands.get(choix - 1).execute();
-                } else {
-                    System.out.println("Unknown option.");
-                }
-            } catch (Exception e) {
-                System.out.println("Please enter a valid number.");
             }
         }
+
+        List<Command> commands = Arrays.asList(
+                new AddGameCommand(),
+                new ListGamesCommand(),
+                new DeleteCommand(),
+                new SearchCommand(),
+                new RecommandGameCommand()
+            );
+
+    while(true)
+    {
+        System.out.println("\n=== COLLECTION MANAGEMENT ===");
+        for (int i = 0; i < commands.size(); i++) {
+            System.out.println((i + 1) + ". " + commands.get(i).getLabel());
+        }
+        System.out.println("0. Exit");
+        System.out.print("Choice: ");
+
+        try {
+            String input = sc.nextLine();
+            int choix = Integer.parseInt(input);
+
+            if (choix == 0) {
+                System.out.println("Goodbye!");
+                break;
+            }
+
+            if (choix > 0 && choix <= commands.size()) {
+                commands.get(choix - 1).execute();
+            } else {
+                System.out.println("Unknown option.");
+            }
+        } catch (Exception e) {
+            System.out.println("Please enter a valid number.");
+        }
     }
-}
+}}
