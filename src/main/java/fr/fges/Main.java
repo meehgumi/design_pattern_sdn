@@ -17,8 +17,7 @@ public class Main {
             new AddGameCommand(),
             new ListGamesCommand(),
             new DeleteCommand(),
-            new SearchCommand(),
-            new StatsCommand()
+            new SearchCommand()
         );
 
         while (true) {

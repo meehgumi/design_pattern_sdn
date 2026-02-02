@@ -1,6 +1,5 @@
 package fr.fges.command;
 import fr.fges.GameCollection;
-import fr.fges.BoardGame;
 
 public class ListGamesCommand implements Command {
     @Override
