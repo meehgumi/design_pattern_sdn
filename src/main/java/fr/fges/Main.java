@@ -22,29 +22,29 @@ public class Main {
         );
 
         while (true) {
-            System.out.println("\n=== GESTION DE COLLECTION ===");
+            System.out.println("\n=== COLLECTION MANAGEMENT ===");
             for (int i = 0; i < commands.size(); i++) {
                 System.out.println((i + 1) + ". " + commands.get(i).getLabel());
             }
-            System.out.println("0. Quitter");
-            System.out.print("Choix : ");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
 
             try {
                 String input = sc.nextLine();
                 int choix = Integer.parseInt(input);
                 
                 if (choix == 0) {
-                    System.out.println("Au revoir !");
+                    System.out.println("Goodbye!");
                     break;
                 }
                 
                 if (choix > 0 && choix <= commands.size()) {
                     commands.get(choix - 1).execute();
                 } else {
-                    System.out.println("Option inconnue.");
+                    System.out.println("Unknown option.");
                 }
             } catch (Exception e) {
-                System.out.println("Veuillez saisir un nombre valide.");
+                System.out.println("Please enter a valid number.");
             }
         }
     }

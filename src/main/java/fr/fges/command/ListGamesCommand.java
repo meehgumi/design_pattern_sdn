@@ -4,13 +4,13 @@ import fr.fges.BoardGame;
 
 public class ListGamesCommand implements Command {
     @Override
-    public String getLabel() { return "Lister les jeux"; }
+    public String getLabel() { return "List games"; }
 
     @Override
     public void execute() {
         var games = GameCollection.getGames();
         if (games.isEmpty()) {
-            System.out.println("La collection est vide.");
+            System.out.println("The collection is empty.");
         } else {
             games.forEach(g -> System.out.println("- " + g.title() + " (" + g.category() + ")"));
         }

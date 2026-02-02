@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class DeleteCommand implements Command {
     @Override
-    public String getLabel() { return "Supprimer un jeu"; }
+    public String getLabel() { return "Delete a game"; }
 
     @Override
     public void execute() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Titre du jeu à supprimer : ");
+        System.out.print("Title of game to delete: ");
         String title = sc.nextLine();
         GameCollection.removeGame(title);
-        System.out.println("C'est fait !");
+        System.out.println("Done!");
     }
 }

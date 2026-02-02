@@ -3,13 +3,13 @@ import fr.fges.GameCollection;
 
 public class StatsCommand implements Command {
     @Override
-    public String getLabel() { return "Voir les statistiques"; }
+    public String getLabel() { return "View statistics"; }
 
     @Override
     public void execute() {
         var games = GameCollection.getGames();
-        System.out.println("Nombre total de jeux : " + games.size());
+        System.out.println("Total number of games: " + games.size());
         double avg = games.stream().mapToInt(g -> g.minPlayers()).average().orElse(0);
-        System.out.println("Moyenne joueurs minimum : " + String.format("%.2f", avg));
+        System.out.println("Average min players: " + String.format("%.2f", avg));
     }
 }
