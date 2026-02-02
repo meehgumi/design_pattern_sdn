@@ -7,7 +7,8 @@ public class Menu {
                 1. Add Board Game
                 2. Remove Board Game
                 3. List All Board Games
-                4. Exit
+                4. Recommand a game
+                5. Exit
                 Please select an option (1-4):
                 """;
         System.out.println(menuText);

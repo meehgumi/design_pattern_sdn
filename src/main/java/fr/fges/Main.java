@@ -17,7 +17,8 @@ public class Main {
             new AddGameCommand(),
             new ListGamesCommand(),
             new DeleteCommand(),
-            new SearchCommand()
+            new SearchCommand(),
+            new RecommandGameCommand()
         );
 
         while (true) {

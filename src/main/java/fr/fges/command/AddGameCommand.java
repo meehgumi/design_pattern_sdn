@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class AddGameCommand implements Command {
     @Override
     public String getLabel() {
-        return "Ajouter un jeu";
+        return "Add a game";
     }
 
     @Override
