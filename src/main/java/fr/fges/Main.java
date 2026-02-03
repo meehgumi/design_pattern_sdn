@@ -22,7 +22,7 @@ public class Main {
             List<BoardGame> copie = new ArrayList<>(GameCollection.getGames());
             Collections.shuffle(copie);
             if (copie.size() < 3) {
-                System.out.println("Pas assez de jeux pour le sommaire.");
+                System.out.println("Not enough games for the summary.");
             } else {
                 for (int i = 0; i < 3; i++) {
                     System.out.println("- " + copie.get(i).title());

@@ -7,14 +7,12 @@ import java.util.*;
 public class JsonStorage implements StorageStrategy {
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Override
     public void save(String path, List<BoardGame> games) {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(path), games);
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    @Override
     public List<BoardGame> load(String path) {
         try {
             File f = new File(path);

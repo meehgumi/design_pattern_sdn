@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 public class CsvStorage implements StorageStrategy {
-    @Override
     public void save(String path, List<BoardGame> games) {
         try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
             out.println("title,minPlayers,maxPlayers,category");
@@ -14,7 +13,6 @@ public class CsvStorage implements StorageStrategy {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    @Override
     public List<BoardGame> load(String path) {
         List<BoardGame> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {

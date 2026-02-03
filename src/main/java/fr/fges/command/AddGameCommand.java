@@ -5,12 +5,10 @@ import fr.fges.GameCollection;
 import java.util.Scanner;
 
 public class AddGameCommand implements Command {
-    @Override
     public String getLabel() {
         return "Add a game";
     }
 
-    @Override
     public void execute() {
         Scanner sc = new Scanner(System.in);
         try {
