@@ -3,12 +3,14 @@ package fr.fges;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 class GameCollectionTest {
 
     @BeforeEach
     void setUp() {
         // On réinitialise la liste avant chaque test pour éviter les effets de bord
+        GameCollection.init("test.json");
         GameCollection.getGames().clear();
     }
 
@@ -40,13 +42,20 @@ class GameCollectionTest {
     }
 
     @Test
-    void shouldReturnZeroStatsWhenCollectionIsEmpty() {
-        // Arrange (Collection vide par le setUp)
-        
-        // Act
-        int size = GameCollection.getGames().size();
+    void shouldFilterGamesForRecommendation() {
+        //Ajouter des jeux avec différents nombres de joueurs
+        GameCollection.addGame(new BoardGame("Petit jeu", 2, 3, "Family"));
+        GameCollection.addGame(new BoardGame("Moyen jeu", 3, 5, "Strategy"));
+        GameCollection.addGame(new BoardGame("Grand jeu", 6, 10, "Party"));
+
+        //Filtrer pour 4 joueurs
+        int nbPlayers = 4;
+        List<BoardGame> compatibles = GameCollection.getGames().stream()
+                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
+                .toList();
 
         // Assert
-        assertEquals(0, size);
+        assertEquals(1, compatibles.size());
+        assertEquals("Moyen jeu", compatibles.get(0).title());
     }
 }
