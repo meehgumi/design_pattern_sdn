@@ -5,6 +5,7 @@ import fr.fges.GameCollection;
 import java.util.Scanner;
 
 public class AddGameCommand implements Command {
+    private BoardGame gameAdded;
     public String getLabel() {
         return "Add a game";
     }
@@ -20,11 +21,19 @@ public class AddGameCommand implements Command {
             int max = Integer.parseInt(sc.nextLine());
             System.out.print("Catégorie : ");
             String c = sc.nextLine();
-            GameCollection.addGame(new BoardGame(t, min, max, c));
+            this.gameAdded = new BoardGame(t, min, max, c);
+            GameCollection.addGame(this.gameAdded);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+            this.gameAdded = null;
         } catch (Exception e) {
             System.out.println("Input error.");
+        }
+    }
+    public void undo() {
+        if (this.gameAdded != null) {
+            GameCollection.removeGame(this.gameAdded.title());
+            System.out.println("Undo: " + this.gameAdded.title() + " retiré.");
         }
     }
 }
