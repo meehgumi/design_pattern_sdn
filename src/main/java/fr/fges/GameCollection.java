@@ -25,9 +25,15 @@ public class GameCollection {
         save();
     }
 
-    public static void removeGame(String title) {
-        games.removeIf(g -> g.title().equalsIgnoreCase(title));
-        save();
+    public static BoardGame removeGame(String title) {
+        for (BoardGame game : games) {
+            if (game.title().equalsIgnoreCase(title)) {
+                games.remove(game);
+                save();
+                return game;
+            }
+        }
+        return null;
     }
 
     private static void save() {
