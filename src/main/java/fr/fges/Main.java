@@ -34,8 +34,8 @@ public class Main {
                 new AddGameCommand(),
                 new ListGamesCommand(),
                 new DeleteCommand(),
-                new SearchCommand(),
-                new RecommandGameCommand()
+                new RecommandGameCommand(),
+                new GameForXPlayersCommand()
             );
 
     while(true)

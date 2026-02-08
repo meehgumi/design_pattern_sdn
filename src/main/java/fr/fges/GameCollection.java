@@ -1,6 +1,8 @@
 package fr.fges;
 import fr.fges.storage.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class GameCollection {
     private static final List<BoardGame> games = new ArrayList<>();
@@ -26,9 +28,10 @@ public class GameCollection {
     }
 
     public static BoardGame removeGame(String title) {
-        for (BoardGame game : games) {
+        for (Iterator<BoardGame> it = games.iterator(); it.hasNext(); ) {
+            BoardGame game = it.next();
             if (game.title().equalsIgnoreCase(title)) {
-                games.remove(game);
+                it.remove();
                 save();
                 return game;
             }

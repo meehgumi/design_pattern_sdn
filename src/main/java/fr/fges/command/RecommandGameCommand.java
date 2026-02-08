@@ -19,7 +19,7 @@ public class RecommandGameCommand implements Command {
                 .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
                 .toList();
         if (compatibles.isEmpty()) {
-            System.out.println("Aucun jeu trouvé.");
+            System.out.println("No games found");
         } else {
             int index = (int) (Math.random() * compatibles.size());
             BoardGame jeu = compatibles.get(index);
