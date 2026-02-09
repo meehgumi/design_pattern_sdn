@@ -1,9 +1,9 @@
 package fr.fges;
 
 import fr.fges.command.*;
-import java.util.*;
-import java.time.LocalDate;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,29 +14,18 @@ public class Main {
 
         GameCollection.init(args[0]);
         Scanner sc = new Scanner(System.in);
-        DayOfWeek jour = LocalDate.now().getDayOfWeek(); // jour de la semaine actuelle
 
-        if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
-            System.out.println("Weekend summary");
-
-            List<BoardGame> copie = new ArrayList<>(GameCollection.getGames());
-            Collections.shuffle(copie);
-            if (copie.size() < 3) {
-                System.out.println("Not enough games for the summary.");
-            } else {
-                for (int i = 0; i < 3; i++) {
-                    System.out.println("- " + copie.get(i).title());
-                }
-            }
-        }
-
-        List<Command> commands = Arrays.asList(
+        DayOfWeek jour = LocalDate.now().getDayOfWeek();
+        List<Command> commands = new ArrayList<>(Arrays.asList(
                 new AddGameCommand(),
                 new ListGamesCommand(),
                 new DeleteCommand(),
                 new RecommandGameCommand(),
                 new GameForXPlayersCommand()
-            );
+        ));
+        if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
+            commands.add(new SummaryCommand());
+        }
 
     while(true)
     {
