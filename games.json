@@ -13,4 +13,14 @@
   "minPlayers" : 2,
   "maxPlayers" : 2,
   "category" : "jeux"
+}, {
+  "title" : "lol",
+  "minPlayers" : 10,
+  "maxPlayers" : 10,
+  "category" : "MOBA"
+}, {
+  "title" : "zzaa",
+  "minPlayers" : 2,
+  "maxPlayers" : 2,
+  "category" : "jeux"
 } ]

@@ -43,12 +43,12 @@ class GameCollectionTest {
 
     @Test
     void shouldFilterGamesForRecommendation() {
-        //Ajouter des jeux avec différents nombres de joueurs
+        // Ajouter des jeux avec différents nombres de joueurs
         GameCollection.addGame(new BoardGame("Petit jeu", 2, 3, "Family"));
         GameCollection.addGame(new BoardGame("Moyen jeu", 3, 5, "Strategy"));
         GameCollection.addGame(new BoardGame("Grand jeu", 6, 10, "Party"));
 
-        //Filtrer pour 4 joueurs
+        // Filtrer pour 4 joueurs
         int nbPlayers = 4;
         List<BoardGame> compatibles = GameCollection.getGames().stream()
                 .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
@@ -58,4 +58,17 @@ class GameCollectionTest {
         assertEquals(1, compatibles.size());
         assertEquals("Moyen jeu", compatibles.get(0).title());
     }
+
+    @Test
+    void shouldWorkWithSinglePlayerGame() {
+        GameCollection.addGame(new BoardGame("Solo Game", 1, 1, "Strategy"));
+
+        int nbPlayers = 1;
+        List<BoardGame> result = GameCollection.getGames().stream()
+                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
+                .toList();
+
+        assertEquals(1, result.size());
+    }
+    
 }

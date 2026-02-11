@@ -1,6 +1,6 @@
 [ {
-  "title" : "Dixit",
+  "title" : "Catan",
   "minPlayers" : 3,
-  "maxPlayers" : 6,
-  "category" : "Party"
+  "maxPlayers" : 4,
+  "category" : "Family"
 } ]
