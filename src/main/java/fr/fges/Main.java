@@ -1,9 +1,6 @@
 package fr.fges;
 
-import fr.fges.command.*;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.*;
+import fr.fges.command.CommandManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,45 +10,8 @@ public class Main {
         }
 
         GameCollection.init(args[0]);
-        Scanner sc = new Scanner(System.in);
-
-        DayOfWeek jour = LocalDate.now().getDayOfWeek();
-        List<Command> commands = new ArrayList<>(Arrays.asList(
-                new AddGameCommand(),
-                new ListGamesCommand(),
-                new DeleteCommand(),
-                new RecommandGameCommand(),
-                new GameForXPlayersCommand()
-        ));
-        if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
-            commands.add(new SummaryCommand());
-        }
-
-    while(true)
-    {
-        System.out.println("\n=== COLLECTION MANAGEMENT ===");
-        for (int i = 0; i < commands.size(); i++) {
-            System.out.println((i + 1) + ". " + commands.get(i).getLabel());
-        }
-        System.out.println("0. Exit");
-        System.out.print("Choice: ");
-
-        try {
-            String input = sc.nextLine();
-            int choix = Integer.parseInt(input);
-
-            if (choix == 0) {
-                System.out.println("Goodbye!");
-                break;
-            }
-
-            if (choix > 0 && choix <= commands.size()) {
-                commands.get(choix - 1).execute();
-            } else {
-                System.out.println("Unknown option.");
-            }
-        } catch (Exception e) {
-            System.out.println("Please enter a valid number.");
-        }
+        
+        CommandManager manager = new CommandManager();
+        manager.run();
     }
-}}
+}
