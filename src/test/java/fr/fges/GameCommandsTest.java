@@ -83,4 +83,40 @@ class GameCommandsTest {
     void testSummaryLabel() {
         assertEquals("Weekend summary", new SummaryCommand().getLabel());
     }
+
+    @Test
+    void testUndoLabel() {
+        assertEquals("Undo last action", new UndoCommand(new ArrayDeque<>()).getLabel());
+    }
+
+    @Test
+    void testUndoAfterAdd() {
+        ArrayDeque<Runnable> stack = new ArrayDeque<>();
+        AddGameCommand add = new AddGameCommand(stack);
+        GameCollection.addGame(new BoardGame("Catan", 3, 4, "Family"));
+        stack.push(() -> GameCollection.removeGame("Catan"));
+
+        assertEquals(1, GameCollection.getGames().size());
+        new UndoCommand(stack).execute();
+        assertEquals(0, GameCollection.getGames().size());
+    }
+
+    @Test
+    void testUndoAfterDelete() {
+        ArrayDeque<Runnable> stack = new ArrayDeque<>();
+        BoardGame game = new BoardGame("Catan", 3, 4, "Family");
+        GameCollection.addGame(game);
+        GameCollection.removeGame("Catan");
+        stack.push(() -> GameCollection.addGame(game));
+
+        assertEquals(0, GameCollection.getGames().size());
+        new UndoCommand(stack).execute();
+        assertEquals(1, GameCollection.getGames().size());
+    }
+
+    @Test
+    void testUndoEmptyStack() {
+        ArrayDeque<Runnable> stack = new ArrayDeque<>();
+        assertDoesNotThrow(() -> new UndoCommand(stack).execute());
+    }
 }
