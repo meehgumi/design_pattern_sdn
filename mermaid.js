@@ -4,17 +4,58 @@ namespace UI {
     class Main {
         main()
     }
+}
+
+namespace COMMAND {
     class Command {
+        <<interface>>
         execute()
         getLabel()
         undo()
     }
-    class AddGameCommand
-    class DeleteCommand
-    class ListGamesCommand
-    class RecommandGameCommand
-    class GameForXPlayersCommand
-    class SummaryCommand
+    class CommandManager {
+        commands : List~Command~
+        undoStack : Deque~Runnable~
+        run()
+        initCommands()
+        afficherMenu()
+        executerCommande()
+    }
+    class AddGameCommand {
+        undoStack : Deque~Runnable~
+        gameAdded : BoardGame
+        execute()
+        getLabel()
+        undo()
+    }
+    class DeleteCommand {
+        undoStack : Deque~Runnable~
+        deletedGame : BoardGame
+        execute()
+        getLabel()
+        undo()
+    }
+    class ListGamesCommand {
+        execute()
+        getLabel()
+    }
+    class RecommandGameCommand {
+        execute()
+        getLabel()
+    }
+    class GameForXPlayersCommand {
+        execute()
+        getLabel()
+    }
+    class SummaryCommand {
+        execute()
+        getLabel()
+    }
+    class UndoCommand {
+        undoStack : Deque~Runnable~
+        execute()
+        getLabel()
+    }
     class TournamentCommand {
         players
         selectedGame
@@ -22,25 +63,17 @@ namespace UI {
         execute()
         getLabel()
     }
-    class UndoCommand {
-        execute()
-        getLabel()
-    }
 }
 
 namespace BUSINESS {
     class GameCollection {
-        games
-        strategy
+        games : List~BoardGame~
+        storageFile : String
+        strategy : StorageStrategy
         init()
         getGames()
         addGame()
         removeGame()
-    }
-    class CommandManager {
-        history
-        addToHistory(cmd)
-        undo()
     }
     class TournamentFormat {
         <<interface>>
@@ -63,16 +96,23 @@ namespace BUSINESS {
 
 namespace DATA {
     class StorageStrategy {
+        <<interface>>
         save()
         load()
     }
-    class JsonStorage
-    class CsvStorage
+    class JsonStorage {
+        save()
+        load()
+    }
+    class CsvStorage {
+        save()
+        load()
+    }
     class BoardGame {
-        title
-        minPlayers
-        maxPlayers
-        category
+        title : String
+        minPlayers : int
+        maxPlayers : int
+        category : String
     }
 }
 
@@ -82,21 +122,30 @@ Command <|.. ListGamesCommand
 Command <|.. RecommandGameCommand
 Command <|.. GameForXPlayersCommand
 Command <|.. SummaryCommand
-Command <|.. TournamentCommand
 Command <|.. UndoCommand
+Command <|.. TournamentCommand
 
 TournamentFormat <|.. ChampionshipFormat
 TournamentFormat <|.. KingOfTheHillFormat
 
+TournamentCommand --> TournamentFormat
+TournamentCommand --> Player
+
 StorageStrategy <|.. JsonStorage
 StorageStrategy <|.. CsvStorage
 
-GameCollection --> StorageStrategy
-GameCollection --> BoardGame
-Main --> GameCollection
-Main --> Command
 Main --> CommandManager
 CommandManager --> Command
-UndoCommand --> CommandManager
-TournamentCommand --> TournamentFormat
-TournamentCommand --> Player
+CommandManager --> AddGameCommand : injecte undoStack
+CommandManager --> DeleteCommand : injecte undoStack
+CommandManager --> UndoCommand : injecte undoStack
+
+AddGameCommand --> GameCollection
+DeleteCommand --> GameCollection
+ListGamesCommand --> GameCollection
+RecommandGameCommand --> GameCollection
+SummaryCommand --> GameCollection
+GameForXPlayersCommand --> GameCollection
+
+GameCollection --> StorageStrategy
+GameCollection --> BoardGame
