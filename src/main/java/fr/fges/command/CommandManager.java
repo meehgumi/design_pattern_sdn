@@ -7,6 +7,7 @@ import java.util.*;
 public class CommandManager {
     private final List<Command> commands;
     private final Scanner scanner;
+    private final Deque<Runnable> undoStack = new ArrayDeque<>();
 
     public CommandManager() {
         this.scanner = new Scanner(System.in);
@@ -15,9 +16,9 @@ public class CommandManager {
     }
 
     private void initCommands() {
-        commands.add(new AddGameCommand());
+        commands.add(new AddGameCommand(undoStack));
         commands.add(new ListGamesCommand());
-        commands.add(new DeleteCommand());
+        commands.add(new DeleteCommand(undoStack));
         commands.add(new RecommandGameCommand());
         commands.add(new GameForXPlayersCommand());
 
@@ -26,12 +27,14 @@ public class CommandManager {
         if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
             commands.add(new SummaryCommand());
         }
+
+        commands.add(new UndoCommand(undoStack));
     }
 
     public void run() {
         while (true) {
             afficherMenu();
-            
+
             try {
                 String input = scanner.nextLine();
                 int choix = Integer.parseInt(input);

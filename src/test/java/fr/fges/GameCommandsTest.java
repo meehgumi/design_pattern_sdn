@@ -3,6 +3,9 @@ package fr.fges;
 import fr.fges.command.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayDeque;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameCommandsTest {
@@ -20,7 +23,7 @@ class GameCommandsTest {
 
     @Test
     void testAddLabel() {
-        assertEquals("Add a game", new AddGameCommand().getLabel());
+        assertEquals("Add a game", new AddGameCommand(new ArrayDeque<>()).getLabel());
     }
 
     @Test
@@ -39,7 +42,7 @@ class GameCommandsTest {
 
     @Test
     void testDeleteLabel() {
-        assertEquals("Delete a game", new DeleteCommand().getLabel());
+        assertEquals("Delete a game", new DeleteCommand(new ArrayDeque<>()).getLabel());
     }
 
     @Test
