@@ -28,6 +28,7 @@ public class CommandManager {
             commands.add(new SummaryCommand());
         }
 
+        commands.add(new TournamentCommand());
         commands.add(new UndoCommand(undoStack));
     }
 
