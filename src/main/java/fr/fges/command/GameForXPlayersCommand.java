@@ -4,6 +4,12 @@ import fr.fges.GameCollection;
 import java.util.Scanner;
 
 public class GameForXPlayersCommand implements Command {
+    private final GameCollection collection;
+
+    public GameForXPlayersCommand(GameCollection collection) {
+        this.collection = collection;
+    }
+
     public String getLabel() {
         return "Games for X players";
     }
@@ -12,7 +18,7 @@ public class GameForXPlayersCommand implements Command {
         Scanner sc = new Scanner(System.in);
         System.out.print("Number of players : ");
         int nbPlayers = Integer.parseInt(sc.nextLine());
-        GameCollection.getGames()
+        collection.getGames()
                 .stream()
                 .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
                 .forEach(g -> System.out.println("- " + g.title()));

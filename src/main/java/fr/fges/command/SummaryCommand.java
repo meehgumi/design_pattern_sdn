@@ -9,6 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class SummaryCommand implements Command {
+    private final GameCollection collection;
+
+    public SummaryCommand(GameCollection collection) {
+        this.collection = collection;
+    }
+
     public String getLabel() {
         return "Weekend summary";
     }
@@ -17,7 +23,7 @@ public class SummaryCommand implements Command {
         DayOfWeek jour = LocalDate.now().getDayOfWeek();
         if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
             System.out.println("Weekend summary");
-            List<BoardGame> copie = new ArrayList<>(GameCollection.getGames());
+            List<BoardGame> copie = new ArrayList<>(collection.getGames());
             Collections.shuffle(copie);
             if (copie.size() < 3) {
                 System.out.println("Not enough games for the summary.");

@@ -2,15 +2,14 @@ package fr.fges.command;
 
 import fr.fges.BoardGame;
 import fr.fges.GameCollection;
-import java.util.Deque;
 import java.util.Scanner;
 
 public class AddGameCommand implements Command {
-    private final Deque<Runnable> undoStack;
+    private final GameCollection collection;
     private BoardGame gameAdded;
 
-    public AddGameCommand(Deque<Runnable> undoStack) {
-        this.undoStack = undoStack;
+    public AddGameCommand(GameCollection collection) {
+        this.collection = collection;
     }
 
     public String getLabel() {
@@ -29,12 +28,7 @@ public class AddGameCommand implements Command {
             System.out.print("Catégorie : ");
             String c = sc.nextLine();
             this.gameAdded = new BoardGame(t, min, max, c);
-            GameCollection.addGame(this.gameAdded);
-            BoardGame added = this.gameAdded;
-            undoStack.push(() -> {
-                GameCollection.removeGame(added.title());
-                System.out.println("Undo: " + added.title() + " retiré.");
-            });
+            collection.addGame(this.gameAdded);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             this.gameAdded = null;
@@ -45,7 +39,7 @@ public class AddGameCommand implements Command {
 
     public void undo() {
         if (this.gameAdded != null) {
-            GameCollection.removeGame(this.gameAdded.title());
+            collection.removeGame(this.gameAdded.title());
             System.out.println("Undo: " + this.gameAdded.title() + " retiré.");
         }
     }

@@ -1,5 +1,6 @@
 package fr.fges.command;
 
+import fr.fges.GameCollection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -7,28 +8,28 @@ import java.util.*;
 public class CommandManager {
     private final List<Command> commands;
     private final Scanner scanner;
-    private final Deque<Runnable> undoStack = new ArrayDeque<>();
+    private final Deque<Command> undoStack = new ArrayDeque<>();
 
-    public CommandManager() {
+    public CommandManager(GameCollection collection) {
         this.scanner = new Scanner(System.in);
         this.commands = new ArrayList<>();
-        initCommands();
+        initCommands(collection);
     }
 
-    private void initCommands() {
-        commands.add(new AddGameCommand(undoStack));
-        commands.add(new ListGamesCommand());
-        commands.add(new DeleteCommand(undoStack));
-        commands.add(new RecommandGameCommand());
-        commands.add(new GameForXPlayersCommand());
+    private void initCommands(GameCollection collection) {
+        commands.add(new AddGameCommand(collection));
+        commands.add(new ListGamesCommand(collection));
+        commands.add(new DeleteCommand(collection));
+        commands.add(new RecommandGameCommand(collection));
+        commands.add(new GameForXPlayersCommand(collection));
 
         // Ajoute SummaryCommand seulement le weekend
         DayOfWeek jour = LocalDate.now().getDayOfWeek();
         if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
-            commands.add(new SummaryCommand());
+            commands.add(new SummaryCommand(collection));
         }
 
-        commands.add(new TournamentCommand());
+        commands.add(new TournamentCommand(collection));
         commands.add(new UndoCommand(undoStack));
     }
 
@@ -63,7 +64,9 @@ public class CommandManager {
 
     private void executerCommande(int choix) {
         if (choix > 0 && choix <= commands.size()) {
-            commands.get(choix - 1).execute();
+            Command cmd = commands.get(choix - 1);
+            cmd.execute();
+            undoStack.push(cmd);
         } else {
             System.out.println("Unknown option.");
         }

@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TournamentCommand implements Command {
+    private final GameCollection collection;
+
+    public TournamentCommand(GameCollection collection) {
+        this.collection = collection;
+    }
 
     @Override
     public String getLabel() {
@@ -23,7 +28,7 @@ public class TournamentCommand implements Command {
         Scanner sc = new Scanner(System.in);
 
         // 1. Filtrer les jeux compatibles 2 joueurs
-        List<BoardGame> twoPlayerGames = GameCollection.getGames().stream()
+        List<BoardGame> twoPlayerGames = collection.getGames().stream()
                 .filter(g -> g.minPlayers() <= 2 && g.maxPlayers() >= 2)
                 .toList();
 

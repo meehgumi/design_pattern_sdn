@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RecommandGameCommand implements Command {
+    private final GameCollection collection;
+
+    public RecommandGameCommand(GameCollection collection) {
+        this.collection = collection;
+    }
+
     public String getLabel() {
         return "Recommand a game";
     }
@@ -14,7 +20,7 @@ public class RecommandGameCommand implements Command {
         Scanner sc = new Scanner(System.in);
         System.out.print("Number of players :");
         int nbPlayers = Integer.parseInt(sc.nextLine());
-        List<BoardGame> compatibles = GameCollection.getGames()
+        List<BoardGame> compatibles = collection.getGames()
                 .stream()
                 .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
                 .toList();

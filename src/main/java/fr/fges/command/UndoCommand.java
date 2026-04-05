@@ -3,9 +3,9 @@ package fr.fges.command;
 import java.util.Deque;
 
 public class UndoCommand implements Command {
-    private final Deque<Runnable> undoStack;
+    private final Deque<Command> undoStack;
 
-    public UndoCommand(Deque<Runnable> undoStack) {
+    public UndoCommand(Deque<Command> undoStack) {
         this.undoStack = undoStack;
     }
 
@@ -18,6 +18,6 @@ public class UndoCommand implements Command {
             System.out.println("Rien à annuler.");
             return;
         }
-        undoStack.pop().run();
+        undoStack.pop().undo();
     }
 }
