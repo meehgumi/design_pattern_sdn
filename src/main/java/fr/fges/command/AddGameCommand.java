@@ -1,15 +1,15 @@
 package fr.fges.command;
 
 import fr.fges.BoardGame;
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 import java.util.Scanner;
 
 public class AddGameCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
     private BoardGame gameAdded;
 
-    public AddGameCommand(GameCollection collection) {
-        this.collection = collection;
+    public AddGameCommand(GameService service) {
+        this.service = service;
     }
 
     public String getLabel() {
@@ -28,7 +28,7 @@ public class AddGameCommand implements Command {
             System.out.print("Catégorie : ");
             String c = sc.nextLine();
             this.gameAdded = new BoardGame(t, min, max, c);
-            collection.addGame(this.gameAdded);
+            service.addGame(this.gameAdded);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             this.gameAdded = null;
@@ -39,7 +39,7 @@ public class AddGameCommand implements Command {
 
     public void undo() {
         if (this.gameAdded != null) {
-            collection.removeGame(this.gameAdded.title());
+            service.removeGame(this.gameAdded.title());
             System.out.println("Undo: " + this.gameAdded.title() + " retiré.");
         }
     }

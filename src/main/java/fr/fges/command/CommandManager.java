@@ -1,6 +1,6 @@
 package fr.fges.command;
 
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -10,26 +10,26 @@ public class CommandManager {
     private final Scanner scanner;
     private final Deque<Command> undoStack = new ArrayDeque<>();
 
-    public CommandManager(GameCollection collection) {
+    public CommandManager(GameService service) {
         this.scanner = new Scanner(System.in);
         this.commands = new ArrayList<>();
-        initCommands(collection);
+        initCommands(service);
     }
 
-    private void initCommands(GameCollection collection) {
-        commands.add(new AddGameCommand(collection));
-        commands.add(new ListGamesCommand(collection));
-        commands.add(new DeleteCommand(collection));
-        commands.add(new RecommandGameCommand(collection));
-        commands.add(new GameForXPlayersCommand(collection));
+    private void initCommands(GameService service) {
+        commands.add(new AddGameCommand(service));
+        commands.add(new ListGamesCommand(service));
+        commands.add(new DeleteCommand(service));
+        commands.add(new RecommandGameCommand(service));
+        commands.add(new GameForXPlayersCommand(service));
 
         // Ajoute SummaryCommand seulement le weekend
         DayOfWeek jour = LocalDate.now().getDayOfWeek();
         if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
-            commands.add(new SummaryCommand(collection));
+            commands.add(new SummaryCommand(service));
         }
 
-        commands.add(new TournamentCommand(collection));
+        commands.add(new TournamentCommand(service));
         commands.add(new UndoCommand(undoStack));
     }
 

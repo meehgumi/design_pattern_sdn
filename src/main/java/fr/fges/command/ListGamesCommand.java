@@ -1,17 +1,17 @@
 package fr.fges.command;
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 
 public class ListGamesCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
 
-    public ListGamesCommand(GameCollection collection) {
-        this.collection = collection;
+    public ListGamesCommand(GameService service) {
+        this.service = service;
     }
 
     public String getLabel() { return "List games"; }
 
     public void execute() {
-        var games = collection.getGames();
+        var games = service.getAllGames();
         if (games.isEmpty()) {
             System.out.println("The collection is empty.");
         } else {

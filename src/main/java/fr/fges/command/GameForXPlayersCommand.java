@@ -1,13 +1,13 @@
 package fr.fges.command;
 
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 import java.util.Scanner;
 
 public class GameForXPlayersCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
 
-    public GameForXPlayersCommand(GameCollection collection) {
-        this.collection = collection;
+    public GameForXPlayersCommand(GameService service) {
+        this.service = service;
     }
 
     public String getLabel() {
@@ -18,9 +18,7 @@ public class GameForXPlayersCommand implements Command {
         Scanner sc = new Scanner(System.in);
         System.out.print("Number of players : ");
         int nbPlayers = Integer.parseInt(sc.nextLine());
-        collection.getGames()
-                .stream()
-                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
+        service.getGamesForPlayers(nbPlayers)
                 .forEach(g -> System.out.println("- " + g.title()));
     }
 }

@@ -1,7 +1,7 @@
 package fr.fges.command;
 
 import fr.fges.BoardGame;
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 import fr.fges.Player;
 import fr.fges.tournament.ChampionshipFormat;
 import fr.fges.tournament.KingOfTheHillFormat;
@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TournamentCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
 
-    public TournamentCommand(GameCollection collection) {
-        this.collection = collection;
+    public TournamentCommand(GameService service) {
+        this.service = service;
     }
 
     @Override
@@ -28,9 +28,7 @@ public class TournamentCommand implements Command {
         Scanner sc = new Scanner(System.in);
 
         // 1. Filtrer les jeux compatibles 2 joueurs
-        List<BoardGame> twoPlayerGames = collection.getGames().stream()
-                .filter(g -> g.minPlayers() <= 2 && g.maxPlayers() >= 2)
-                .toList();
+        List<BoardGame> twoPlayerGames = service.getGamesForPlayers(2);
 
         if (twoPlayerGames.isEmpty()) {
             System.out.println("Aucun jeu compatible 2 joueurs dans la collection.");

@@ -1,15 +1,13 @@
 package fr.fges.command;
 
-import fr.fges.BoardGame;
-import fr.fges.GameCollection;
-import java.util.List;
+import fr.fges.GameService;
 import java.util.Scanner;
 
 public class RecommandGameCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
 
-    public RecommandGameCommand(GameCollection collection) {
-        this.collection = collection;
+    public RecommandGameCommand(GameService service) {
+        this.service = service;
     }
 
     public String getLabel() {
@@ -20,16 +18,10 @@ public class RecommandGameCommand implements Command {
         Scanner sc = new Scanner(System.in);
         System.out.print("Number of players :");
         int nbPlayers = Integer.parseInt(sc.nextLine());
-        List<BoardGame> compatibles = collection.getGames()
-                .stream()
-                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
-                .toList();
-        if (compatibles.isEmpty()) {
-            System.out.println("No games found");
-        } else {
-            int index = (int) (Math.random() * compatibles.size());
-            BoardGame jeu = compatibles.get(index);
-            System.out.println("- " + jeu.title());
-        }
+        service.recommendGame(nbPlayers)
+                .ifPresentOrElse(
+                    g -> System.out.println("- " + g.title()),
+                    () -> System.out.println("No games found")
+                );
     }
 }

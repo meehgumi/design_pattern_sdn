@@ -18,8 +18,9 @@ public class Main {
         List<BoardGame> initialGames = strategy.load(file);
 
         GameCollection collection = new GameCollection(initialGames, strategy, file);
+        GameService service = new GameService(collection);
 
-        CommandManager manager = new CommandManager(collection);
+        CommandManager manager = new CommandManager(service);
         manager.run();
     }
 }

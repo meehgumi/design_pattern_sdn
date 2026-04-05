@@ -1,18 +1,16 @@
 package fr.fges.command;
 
 import fr.fges.BoardGame;
-import fr.fges.GameCollection;
+import fr.fges.GameService;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SummaryCommand implements Command {
-    private final GameCollection collection;
+    private final GameService service;
 
-    public SummaryCommand(GameCollection collection) {
-        this.collection = collection;
+    public SummaryCommand(GameService service) {
+        this.service = service;
     }
 
     public String getLabel() {
@@ -23,14 +21,11 @@ public class SummaryCommand implements Command {
         DayOfWeek jour = LocalDate.now().getDayOfWeek();
         if (jour == DayOfWeek.SATURDAY || jour == DayOfWeek.SUNDAY) {
             System.out.println("Weekend summary");
-            List<BoardGame> copie = new ArrayList<>(collection.getGames());
-            Collections.shuffle(copie);
-            if (copie.size() < 3) {
+            List<BoardGame> selection = service.getRandomGames(3);
+            if (selection.size() < 3) {
                 System.out.println("Not enough games for the summary.");
             } else {
-                for (int i = 0; i < 3; i++) {
-                    System.out.println("- " + copie.get(i).title());
-                }
+                selection.forEach(g -> System.out.println("- " + g.title()));
             }
         }
     }

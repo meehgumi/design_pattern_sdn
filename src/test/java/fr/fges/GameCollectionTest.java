@@ -1,74 +1,60 @@
 package fr.fges;
 
+import fr.fges.storage.StorageStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameCollectionTest {
 
+    private GameCollection collection;
+
+    // StorageStrategy sans fichier pour les tests
+    private static final StorageStrategy NO_OP = new StorageStrategy() {
+        public List<BoardGame> load(String file) { return new ArrayList<>(); }
+        public void save(String file, List<BoardGame> games) {}
+    };
+
     @BeforeEach
     void setUp() {
-        // On réinitialise la liste avant chaque test pour éviter les effets de bord
-        GameCollection.init("test.json");
-        GameCollection.getGames().clear();
+        collection = new GameCollection(new ArrayList<>(), NO_OP, "test");
     }
 
     @Test
     void shouldAddGameToCollection() {
-        // Arrange
-        BoardGame game = new BoardGame("Terraforming Mars", 1, 5, "Strategy");
+        collection.addGame(new BoardGame("Terraforming Mars", 1, 5, "Strategy"));
 
-        // Act
-        GameCollection.addGame(game);
-
-        // Assert
-        assertEquals(1, GameCollection.getGames().size());
-        assertEquals("Terraforming Mars", GameCollection.getGames().get(0).title());
+        assertEquals(1, collection.getGames().size());
+        assertEquals("Terraforming Mars", collection.getGames().get(0).title());
     }
 
     @Test
     void shouldRemoveGameByTitle() {
-        // Arrange
-        GameCollection.addGame(new BoardGame("Catan", 3, 4, "Family"));
-        GameCollection.addGame(new BoardGame("Dixit", 3, 6, "Party"));
+        collection.addGame(new BoardGame("Catan", 3, 4, "Family"));
+        collection.addGame(new BoardGame("Dixit", 3, 6, "Party"));
 
-        // Act
-        GameCollection.removeGame("Catan");
+        collection.removeGame("Catan");
 
-        // Assert
-        assertEquals(1, GameCollection.getGames().size());
-        assertFalse(GameCollection.getGames().stream().anyMatch(g -> g.title().equals("Catan")));
+        assertEquals(1, collection.getGames().size());
+        assertFalse(collection.getGames().stream().anyMatch(g -> g.title().equals("Catan")));
     }
 
     @Test
-    void shouldFilterGamesForRecommendation() {
-        // Ajouter des jeux avec différents nombres de joueurs
-        GameCollection.addGame(new BoardGame("Petit jeu", 2, 3, "Family"));
-        GameCollection.addGame(new BoardGame("Moyen jeu", 3, 5, "Strategy"));
-        GameCollection.addGame(new BoardGame("Grand jeu", 6, 10, "Party"));
+    void shouldRemoveCaseInsensitive() {
+        collection.addGame(new BoardGame("Catan", 3, 4, "Family"));
 
-        // Filtrer pour 4 joueurs
-        int nbPlayers = 4;
-        List<BoardGame> compatibles = GameCollection.getGames().stream()
-                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
-                .toList();
+        BoardGame removed = collection.removeGame("catan");
 
-        // Assert
-        assertEquals(1, compatibles.size());
-        assertEquals("Moyen jeu", compatibles.get(0).title());
+        assertNotNull(removed);
+        assertTrue(collection.getGames().isEmpty());
     }
 
     @Test
-    void shouldWorkWithSinglePlayerGame() {
-        GameCollection.addGame(new BoardGame("Solo Game", 1, 1, "Strategy"));
-
-        int nbPlayers = 1;
-        List<BoardGame> result = GameCollection.getGames().stream()
-                .filter(g -> g.minPlayers() <= nbPlayers && g.maxPlayers() >= nbPlayers)
-                .toList();
-
-        assertEquals(1, result.size());
+    void shouldReturnNullWhenGameNotFound() {
+        assertNull(collection.removeGame("Monopoly"));
     }
-    
 }

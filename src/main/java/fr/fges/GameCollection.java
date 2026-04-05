@@ -18,11 +18,6 @@ public class GameCollection {
     public List<BoardGame> getGames() { return games; }
 
     public void addGame(BoardGame game) {
-        boolean alreadyExists = games.stream()
-            .anyMatch(g -> g.title().equalsIgnoreCase(game.title()));
-        if (alreadyExists) {
-            throw new IllegalArgumentException("A game with this title already exists."); // interrompt la commande
-        }
         games.add(game);
         save();
     }
