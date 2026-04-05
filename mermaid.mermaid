@@ -1,35 +1,31 @@
 classDiagram
+    direction TB
 
 namespace UI {
     class Main {
-        main()
+        main(args)
     }
-}
-
-namespace COMMAND {
+    class CommandManager {
+        commands : List~Command~
+        undoStack : Deque~Command~
+        run()
+        initCommands()
+        afficherMenu()
+        executerCommande()
+    }
     class Command {
         <<interface>>
         execute()
         getLabel()
         undo()
     }
-    class CommandManager {
-        commands : List~Command~
-        undoStack : Deque~Runnable~
-        run()
-        initCommands()
-        afficherMenu()
-        executerCommande()
-    }
     class AddGameCommand {
-        undoStack : Deque~Runnable~
         gameAdded : BoardGame
         execute()
         getLabel()
         undo()
     }
     class DeleteCommand {
-        undoStack : Deque~Runnable~
         deletedGame : BoardGame
         execute()
         getLabel()
@@ -52,38 +48,34 @@ namespace COMMAND {
         getLabel()
     }
     class UndoCommand {
-        undoStack : Deque~Runnable~
+        undoStack : Deque~Command~
         execute()
         getLabel()
     }
     class TournamentCommand {
-        players
-        selectedGame
-        format
         execute()
         getLabel()
     }
 }
 
 namespace BUSINESS {
-    class GameCollection {
-        games : List~BoardGame~
-        storageFile : String
-        strategy : StorageStrategy
-        init()
-        getGames()
-        addGame()
-        removeGame()
+    class GameService {
+        addGame(game)
+        removeGame(title)
+        getAllGames()
+        getGamesForPlayers(n)
+        recommendGame(n)
+        getRandomGames(count)
     }
     class TournamentFormat {
         <<interface>>
-        play(players)
+        play(players, sc)
     }
     class ChampionshipFormat {
-        play(players)
+        play(players, sc)
     }
     class KingOfTheHillFormat {
-        play(players)
+        play(players, sc)
     }
     class Player {
         name
@@ -95,24 +87,34 @@ namespace BUSINESS {
 }
 
 namespace DATA {
-    class StorageStrategy {
-        <<interface>>
-        save()
-        load()
-    }
-    class JsonStorage {
-        save()
-        load()
-    }
-    class CsvStorage {
-        save()
-        load()
+    class GameCollection {
+        games : List~BoardGame~
+        addGame(game)
+        removeGame(title)
+        getGames()
     }
     class BoardGame {
+        <<record>>
         title : String
         minPlayers : int
         maxPlayers : int
         category : String
+    }
+}
+
+namespace STORAGE {
+    class StorageStrategy {
+        <<interface>>
+        save(file, games)
+        load(file)
+    }
+    class JsonStorage {
+        save(file, games)
+        load(file)
+    }
+    class CsvStorage {
+        save(file, games)
+        load(file)
     }
 }
 
@@ -128,24 +130,27 @@ Command <|.. TournamentCommand
 TournamentFormat <|.. ChampionshipFormat
 TournamentFormat <|.. KingOfTheHillFormat
 
-TournamentCommand --> TournamentFormat
-TournamentCommand --> Player
-
 StorageStrategy <|.. JsonStorage
 StorageStrategy <|.. CsvStorage
 
 Main --> CommandManager
+Main --> GameService
+Main --> GameCollection
+Main --> StorageStrategy
+
 CommandManager --> Command
-CommandManager --> AddGameCommand : injecte undoStack
-CommandManager --> DeleteCommand : injecte undoStack
-CommandManager --> UndoCommand : injecte undoStack
+CommandManager --> GameService
 
-AddGameCommand --> GameCollection
-DeleteCommand --> GameCollection
-ListGamesCommand --> GameCollection
-RecommandGameCommand --> GameCollection
-SummaryCommand --> GameCollection
-GameForXPlayersCommand --> GameCollection
+AddGameCommand --> GameService
+DeleteCommand --> GameService
+ListGamesCommand --> GameService
+RecommandGameCommand --> GameService
+GameForXPlayersCommand --> GameService
+SummaryCommand --> GameService
+TournamentCommand --> GameService
+TournamentCommand --> TournamentFormat
+TournamentCommand --> Player
 
+GameService --> GameCollection
 GameCollection --> StorageStrategy
 GameCollection --> BoardGame
